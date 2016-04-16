@@ -18,6 +18,7 @@ public class Bow : Weapon
 
         transform.position = origin;
 
+        m_arrow.Reset(origin);
         m_arrow.direction = direction;
         m_arrow.Spawn(transform.position, transform.rotation);
     }

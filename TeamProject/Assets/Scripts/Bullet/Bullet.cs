@@ -61,12 +61,12 @@ public class Bullet : MonoBehaviour
 
     public void Reset(Vector3 pos)
     {
+        if (transform == null)
+            transform = GetComponent<Transform>();
+
         transform.position = pos;
 
         direction = Vector2.zero;
         m_damage = 0f;
-
-        if (transform == null)
-            transform = GetComponent<Transform>();
     }
 }
