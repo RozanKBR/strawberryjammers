@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
         PlayerRolling(h, v);
         PlayerAttack();
 
-        //Debug.Log("Direction: " + m_current_direction);
+        Debug.Log("Direction: " + m_current_direction);
     }
 
     private void PlayerMovement(float h, float v)
