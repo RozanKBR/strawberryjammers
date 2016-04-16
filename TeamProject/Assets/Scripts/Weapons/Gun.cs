@@ -4,7 +4,7 @@ using System;
 
 public class Gun : Weapon
 {
-    public override void Attack(Vector3 direction)
+    public override void Attack(Vector3 direction, Vector3 origin)
     {
         throw new NotImplementedException();
     }

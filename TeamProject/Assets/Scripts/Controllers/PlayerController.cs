@@ -16,14 +16,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float m_rollingDuration = 1f;
     [SerializeField] [Range(0, 100)] private int m_rollingSpeedModifier = 20;
     [SerializeField] private float m_rollingCooldown = 0.15f;
-    [SerializeField] private GameObject m_weaponSlot = null;
+    //[SerializeField] private GameObject m_weaponSlot = null;
 
     private bool m_is_rolling = false;
     private bool m_is_movement_button_pressed = false;
     private float m_current_roll_duration = 0f;
     private float m_current_roll_cooldown = 0f;
     private Vector3 m_rolling_direction = Vector3.zero;
-    private Vector3 m_current_direction = Vector3.zero;
+    private Vector3 m_current_direction = Vector3.up;
 
     private PlayerStats m_stats = new PlayerStats();
     private Weapon m_weapon = null;
@@ -31,15 +31,16 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         transform = GetComponent<Transform>();
-        renderer = GetComponent<SpriteRenderer>();
+        //renderer = GetComponent<SpriteRenderer>();
 
-        m_sprite = renderer.sprite;
+        //m_sprite = renderer.sprite;
 
         //temp
-        if (m_weaponSlot == null)
-            Debug.LogError("No Weapon Assigned!");
+        //if (m_weaponSlot == null)
+        //    Debug.LogError("No Weapon Assigned!");
 
-        m_weapon = m_weaponSlot.GetComponent<Weapon>();
+        //m_weapon = m_weaponSlot.GetComponent<Weapon>();
+        m_weapon = GameManager._Instance.AvailableWeapons[0];
     }
 
     void Start()
@@ -56,12 +57,11 @@ public class PlayerController : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        m_is_movement_button_pressed =  Mathf.Abs(h) >= m_buttonPressureOffset &&
+        m_is_movement_button_pressed =  Mathf.Abs(h) >= m_buttonPressureOffset ||
                                         Mathf.Abs(v) >= m_buttonPressureOffset;
 
-        if (m_is_movement_button_pressed)
-            m_current_direction =   ((Vector3.right * h) +
-                                    (Vector3.forward * v));
+        //if (m_is_movement_button_pressed)
+        m_current_direction = ((Vector3.right * h) + (Vector3.forward * v));
 
         PlayerMovement(h, v);
         PlayerRolling(h, v);
@@ -131,7 +131,8 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))
         {
-            m_weapon.Attack(m_current_direction);
+            Debug.Log("Direction Shoot: " + m_current_direction);
+            m_weapon.Attack(m_current_direction, transform.position);
         }
     }
 

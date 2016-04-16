@@ -24,5 +24,5 @@ public abstract class Weapon : MonoBehaviour
     //        GameObject clone = Instantiate(attackShot, transform.position, transform.rotation) as GameObject;      
     //}
     
-    public abstract void Attack(Vector3 direction);
+    public abstract void Attack(Vector3 direction, Vector3 origin);
 }
