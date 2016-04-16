@@ -18,9 +18,11 @@ public abstract class Weapon : MonoBehaviour
         transform = GetComponent<Transform>();
     }
 
-    public void attackMove(Vector3 direction)
-    {              
-            nextAttack = Time.time + coolDown;
-            GameObject clone = Instantiate(attackShot, transform.position, transform.rotation) as GameObject;      
-    }
+    //public void attackMove(Vector3 direction)
+    //{              
+    //        nextAttack = Time.time + coolDown;
+    //        GameObject clone = Instantiate(attackShot, transform.position, transform.rotation) as GameObject;      
+    //}
+    
+    public abstract void Attack(Vector3 direction);
 }

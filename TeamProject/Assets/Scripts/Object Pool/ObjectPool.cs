@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿#region Using Statements
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+#endregion
 
 public sealed class ObjectPool : MonoBehaviour 
 {

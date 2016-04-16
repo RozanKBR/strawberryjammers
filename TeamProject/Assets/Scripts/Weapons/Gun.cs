@@ -1,19 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class Gun : Weapon
 {
-   
-
-	// Use this for initialization
-	
-	
-	// Update is called once per frame
-	void Update ()
+    public override void Attack(Vector3 direction)
     {
-        if (Input.GetButton("Fire1") && Time.time > nextAttack)
-        {
-            attackMove(Vector3.forward);
-        }
+        throw new NotImplementedException();
+    }
+
+
+    // Use this for initialization
+
+
+    // Update is called once per frame
+    void Update ()
+    {
+        //if (Input.GetButton("Fire1") && Time.time > nextAttack)
+        //{
+        //    attackMove(Vector3.forward);
+        //}
 	}
 }

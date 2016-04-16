@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float m_rollingDuration = 1f;
     [SerializeField] [Range(0, 100)] private int m_rollingSpeedModifier = 20;
     [SerializeField] private float m_rollingCooldown = 0.15f;
-    [SerializeField] private GameObject m_weapon_slot = null;
+    [SerializeField] private GameObject m_weaponSlot = null;
 
     private bool m_is_rolling = false;
     private bool m_is_movement_button_pressed = false;
@@ -34,6 +34,12 @@ public class PlayerController : MonoBehaviour
         renderer = GetComponent<SpriteRenderer>();
 
         m_sprite = renderer.sprite;
+
+        //temp
+        if (m_weaponSlot == null)
+            Debug.LogError("No Weapon Assigned!");
+
+        m_weapon = m_weaponSlot.GetComponent<Weapon>();
     }
 
     void Start()
@@ -61,7 +67,7 @@ public class PlayerController : MonoBehaviour
         PlayerRolling(h, v);
         PlayerAttack();
 
-        Debug.Log("Direction: " + m_current_direction);
+        //Debug.Log("Direction: " + m_current_direction);
     }
 
     private void PlayerMovement(float h, float v)
@@ -125,7 +131,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))
         {
-            m_weapon.attackMove(m_current_direction);
+            m_weapon.Attack(m_current_direction);
         }
     }
 

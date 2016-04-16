@@ -10,7 +10,7 @@ public class Turret : MonoBehaviour
 	void Start () 
     {
         bulletPrefab.CreatePool();
-        bulletPrefab.explosionPrefab.CreatePool();
+        //bulletPrefab.explosionPrefab.CreatePool();
 	}
 	
 	// Update is called once per frame
