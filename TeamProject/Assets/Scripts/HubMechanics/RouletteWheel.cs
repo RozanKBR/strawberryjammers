@@ -14,6 +14,7 @@ public class RouletteWheel : MonoBehaviour
     int index;
 
     private Transform target;
+    private PlayerController target_controller;
     public AudioSource audioSource;
 
     
@@ -25,7 +26,9 @@ public class RouletteWheel : MonoBehaviour
         rouletteWheel = GameObject.FindGameObjectsWithTag("RouletteWheel");
 
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-	}
+        target_controller = target.gameObject.GetComponent<PlayerController>();
+
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -54,12 +57,12 @@ public class RouletteWheel : MonoBehaviour
         animator.SetBool("ActivateRouletteWheel", false);
 
     }
-    public void RecieveWeapon()
+    public void GiveWeapon()
     {
         Weapon[] randomWeapons = GameManager._Instance.AvailableWeapons;
         index = Random.Range(0, randomWeapons.Length);
         currentWeapon = randomWeapons[index];
-        print(currentWeapon.name);
+        target_controller.AssignWeapon(currentWeapon);
     }
 
     private void AddWeaponToList ()

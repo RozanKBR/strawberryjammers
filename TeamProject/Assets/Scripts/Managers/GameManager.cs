@@ -10,7 +10,6 @@ public enum GameState
 }
 
 
-
 public class GameManager : MonoBehaviour
 {
     #region Singleton

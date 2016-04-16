@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
         //    Debug.LogError("No Weapon Assigned!");
 
         //m_weapon = m_weaponSlot.GetComponent<Weapon>();
-        m_weapon = GameManager._Instance.AvailableWeapons[0];
+        //m_weapon = GameManager._Instance.AvailableWeapons[0];
     }
 
     void Start()
@@ -126,12 +126,11 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerAttack()
     {
-        if (m_is_rolling)
+        if (m_is_rolling || m_weapon == null)
             return;
 
         if (Input.GetButtonDown("Fire1"))
         {
-            Debug.Log("Direction Shoot: " + m_current_direction);
             m_weapon.Attack(m_current_direction, transform.position);
         }
     }
