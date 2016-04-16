@@ -6,9 +6,17 @@ public class RouletteWheel : MonoBehaviour
 {
     private List<Weapon> WeaponList = new List<Weapon>();
     public float DistanceFromWheel = 5.0f;
+
     public new Animation animation;
+
     public GameObject []rouletteWheel;
+    public Weapon currentWeapon;
+    int index;
+
     private Transform target;
+    public AudioSource audioSource;
+
+    
 	// Use this for initialization
 	void Start ()
     {
@@ -31,15 +39,20 @@ public class RouletteWheel : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     Debug.Log("SpinWheel");
+                    //animation.Play();
+                    audioSource.Play();
                 }
             }
         }
 	
 	}
 
-    private void RecieveWeapon()
+    public void RecieveWeapon()
     {
-
+        Weapon[] randomWeapons = GameManager._Instance.AvailableWeapons;
+        index = Random.Range(0, randomWeapons.Length);
+        currentWeapon = randomWeapons[index];
+        print(currentWeapon.name);
     }
 
     private void AddWeaponToList ()

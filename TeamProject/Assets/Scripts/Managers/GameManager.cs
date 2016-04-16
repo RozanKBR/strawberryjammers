@@ -34,6 +34,9 @@ public class GameManager : MonoBehaviour
     public GameState MGameState { private set; get; }
     public float MGameTime { private set; get; }
 
+    public Weapon[] AllWeapons;
+    public Weapon[] AvailableWeapons;
+
 
     void Awake()
     {
