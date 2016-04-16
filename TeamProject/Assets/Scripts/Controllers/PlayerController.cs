@@ -6,20 +6,27 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
-    private new Transform transform;
-    private new SpriteRenderer renderer;
-    private Sprite m_sprite;
+    private new Transform transform = null;
+    private new SpriteRenderer renderer = null;
+    private Sprite m_sprite = null;
 
-    [Header ("Character Movement")]
+    [Header("Character Movement")]
+    [SerializeField] private float m_buttonPressureOffset = 0.2f;
     [SerializeField] private float m_characterSpeed = 5f;
     [SerializeField] private float m_rollingDuration = 1f;
-    [SerializeField] [Range (0, 100)] private int m_rollingSpeedModifier = 20;
+    [SerializeField] [Range(0, 100)] private int m_rollingSpeedModifier = 20;
     [SerializeField] private float m_rollingCooldown = 0.15f;
+    [SerializeField] private GameObject m_weapon_slot = null;
 
     private bool m_is_rolling = false;
+    private bool m_is_movement_button_pressed = false;
     private float m_current_roll_duration = 0f;
     private float m_current_roll_cooldown = 0f;
     private Vector3 m_rolling_direction = Vector3.zero;
+    private Vector3 m_current_direction = Vector3.zero;
+
+    private PlayerStats m_stats = new PlayerStats();
+    private Weapon m_weapon = null;
 
     void Awake()
     {
@@ -29,19 +36,32 @@ public class PlayerController : MonoBehaviour
         m_sprite = renderer.sprite;
     }
 
+    void Start()
+    {
+        SetupPlayerStats();
+    }
+
     void Update()
     {
         if (GameManager._Instance.MGameState == GameState.Paused)
             return;
 
-        // the game is running excute the code
-
         // grab input
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
+        m_is_movement_button_pressed =  Mathf.Abs(h) >= m_buttonPressureOffset &&
+                                        Mathf.Abs(v) >= m_buttonPressureOffset;
+
+        if (m_is_movement_button_pressed)
+            m_current_direction =   ((Vector3.right * h) +
+                                    (Vector3.forward * v));
+
         PlayerMovement(h, v);
         PlayerRolling(h, v);
+        PlayerAttack();
+
+        //Debug.Log("Direction: " + m_current_direction);
     }
 
     private void PlayerMovement(float h, float v)
@@ -49,9 +69,8 @@ public class PlayerController : MonoBehaviour
         if (m_is_rolling)
             return;
 
-        transform.position +=   ((Vector3.right * h * m_characterSpeed) + 
-                                (Vector3.forward * v * m_characterSpeed)) * 
-                                GameManager._Instance.MGameTime;
+        transform.position +=   ((Vector3.right * h) + (Vector3.forward * v)) * 
+                                m_characterSpeed * GameManager._Instance.MGameTime;
     }
 
     private void PlayerRolling(float h, float v)
@@ -84,18 +103,44 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                if (Input.GetButton("RollActive"))
+                if (m_is_movement_button_pressed)
                 {
-                    if (h != 0 || v != 0)
+                    if (Input.GetButton("RollActive"))
                     {
-                        m_rolling_direction = (Vector3.right * h) +
+                        m_rolling_direction =   (Vector3.right * h) +
                                                 (Vector3.forward * v);
 
                         m_is_rolling = true;
-                        Debug.Log("Roll");
+                        //Debug.Log("Is Rolling");
                     }
                 }
             }
-        }        
+        }
+    }
+
+    private void PlayerAttack()
+    {
+        if (m_is_rolling)
+            return;
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            m_weapon.attackMove(m_current_direction);
+        }
+    }
+
+
+    private void SetupPlayerStats ()
+    {
+        m_stats.Attack = 2.0f;
+        m_stats.Defense = 2.0f;
+
+        m_stats.MaxHealth = 100f;
+        m_stats.CurrentHealth = m_stats.MaxHealth;
+    }
+
+    public void AssignWeapon (Weapon w)
+    {
+        m_weapon = w;
     }
 }
