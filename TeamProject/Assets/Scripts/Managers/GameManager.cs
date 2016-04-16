@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
 
 
     public GameState MGameState { private set; get; }
+    public float MGameTime { private set; get; }
 
 
     void Awake()
@@ -44,6 +45,11 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        MGameState = GameState.Running;
+    }
 
+    void Update()
+    {
+        MGameTime = MGameState == GameState.Running ? Time.deltaTime : 0f;
     }
 }
