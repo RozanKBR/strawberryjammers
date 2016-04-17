@@ -9,7 +9,7 @@ public class Sword : Weapon
 {
     [SerializeField] private Bullet m_slash;
 
-    public override void Attack(Vector3 direction, Vector3 origin)
+    public override void Attack(Vector3 direction, Vector3 origin, Target t)
     {
         if (m_has_attacked)
             return;
@@ -24,6 +24,7 @@ public class Sword : Weapon
         Bullet b = m_slash.Spawn(transform.position, transform.rotation);
         b.Reset(origin);
         b.SetDirection(direction);
+        b.SetTarget(t);
         b.SetDamage(damage);
     }
 }

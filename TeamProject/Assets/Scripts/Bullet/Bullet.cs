@@ -1,7 +1,14 @@
 ﻿#region Using Statements
 using UnityEngine;
+using System;
 using System.Collections;
 #endregion
+
+public enum Target
+{
+    Player,
+    Enemy
+}
 
 
 public class Bullet : MonoBehaviour 
@@ -12,8 +19,7 @@ public class Bullet : MonoBehaviour
     public Vector3 direction;
     private float m_damage = 0f;
     private new Transform transform;
-    private string m_tag_to_kill;
-    //private Types m_type_to_kill;
+    private Target m_target;
 
     void Awake()
     {
@@ -51,14 +57,30 @@ public class Bullet : MonoBehaviour
             Ray ray = new Ray(transform.position, direction);
             if (Physics.Raycast(ray, out hit, 2f))
             {
-                // collision
-                Enemy e = hit.collider.gameObject.GetComponent<Enemy>();
-                if (e)
+                switch (m_target)
                 {
-                    //Debug.Log(m_damage);
-                    e.ApplyDamage(m_damage);
-                    this.Recycle();
+                    case Target.Enemy:
+                        Enemy e = hit.collider.gameObject.GetComponent<Enemy>();
+                        if (e)
+                        {
+                            //Debug.Log(m_damage);
+                            e.ApplyDamage(m_damage);
+                            this.Recycle();
+                        }
+                        break;
+                    case Target.Player:
+                        PlayerController pc = hit.collider.gameObject.GetComponent<PlayerController>();
+                        if (pc)
+                        {
+                            //Debug.Log(m_damage);
+                            pc.ApplyDamage(m_damage);
+                            this.Recycle();
+                        }
+                        break;
                 }
+
+                // collision
+                
             }
 
             yield return 0;
@@ -88,6 +110,11 @@ public class Bullet : MonoBehaviour
 
         direction = Vector3.zero;
         m_damage = 0f;
+    }
+
+    public void SetTarget(Target t)
+    {
+        m_target = t;
     }
 
     public void SetDirection (Vector3 Ndirection)

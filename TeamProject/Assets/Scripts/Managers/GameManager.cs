@@ -33,6 +33,9 @@ public class GameManager : MonoBehaviour
     public GameState MGameState { private set; get; }
     public float MGameTime { private set; get; }
 
+    [SerializeField]
+    private RouletteWheel m_wheel;
+
     public Weapon[] AllWeapons;
     public Weapon[] AvailableWeapons;
 
@@ -68,5 +71,11 @@ public class GameManager : MonoBehaviour
     public void ResetGame()
     {
         UnPauseGame();
+
+        m_wheel.Reset();
+
+        Enemy[] enemies = FindObjectsOfType<Enemy>();
+        foreach(Enemy e in enemies)
+            e.Reset();
     }
 }

@@ -9,7 +9,7 @@ public class Skeleton : Enemy
 
     protected override void Attack()
     {
-        bow.Attack((destPos - transform.position).normalized, transform.position);
+        bow.Attack((destPos - transform.position).normalized, transform.position, Target.Player);
     }
 
     protected override void FindPlayer()

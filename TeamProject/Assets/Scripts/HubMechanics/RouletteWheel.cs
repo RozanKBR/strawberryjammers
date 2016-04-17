@@ -109,6 +109,12 @@ public class RouletteWheel : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, DistanceFromWheel);
     }
 
+    public void Reset()
+    {
+        m_has_started = false;
+    }
+
+
     
 
 }

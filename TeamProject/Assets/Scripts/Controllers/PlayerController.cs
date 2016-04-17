@@ -164,7 +164,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))
         {
-            m_weapon.Attack(m_current_direction, transform.position);
+            m_weapon.Attack(m_current_direction, transform.position, Target.Enemy);
         }
     }
 
@@ -266,6 +266,8 @@ public class PlayerController : MonoBehaviour
         m_is_dead = false;
         m_is_rolling = false;
         transform.position = m_spawnPoint.position;
+
+        m_weapon_slot_sprite_renderer.sprite = null;
 
         GameManager._Instance.ResetGame();
     }

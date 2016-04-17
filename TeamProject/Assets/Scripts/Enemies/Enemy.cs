@@ -25,6 +25,8 @@ public abstract class Enemy : MonoBehaviour
     protected new Transform transform = null;
     protected Animator animator = null;
 
+    private Vector3 m_start_position = Vector3.zero;
+
     protected float m_current_health = 0f;
     protected bool m_is_dead = false;
 
@@ -47,8 +49,8 @@ public abstract class Enemy : MonoBehaviour
     protected virtual void Initialize()
     {
         curState = EnemyState.Patrol;
-        curSpeed = m_moveSpeed;
-        curRotSpeed = 2.0f;
+        //curSpeed = m_moveSpeed;
+        //curRotSpeed = 2.0f;
         bDead = false;
         elapsedTime = 0.0f;
         shootRate = 3.0f;
@@ -85,7 +87,7 @@ public abstract class Enemy : MonoBehaviour
 
 
         //update the time
-        elapsedTime += Time.deltaTime;
+        elapsedTime += GameManager._Instance.MGameTime;
         //Go to dead state if no health left
         if (health <= 0)
             curState = EnemyState.Dead;
@@ -226,10 +228,10 @@ public abstract class Enemy : MonoBehaviour
     public EnemyState curState;
 
     //Speed of the Enemy
-    private float curSpeed;
+    //private float curSpeed;
 
     //Enemy Rotation Speed
-    private float curRotSpeed;
+    //private float curRotSpeed;
 
     //Whether the NPC is destroyed or not
     protected bool bDead;
@@ -242,16 +244,25 @@ public abstract class Enemy : MonoBehaviour
 
     void Update()
     {
+        if (m_is_dead)
+            return;
+
         EnemyUpdate();
     }
 
     void FixedUpdate()
     {
+        if (m_is_dead)
+            return;
+
         EnemyFixedUpdate();
     }
 
     void LateUpdate()
     {
+        if (m_is_dead)
+            return;
+
         transform.rotation = Quaternion.Euler(90f, 0f, 0f);
         transform.position += (destPos - transform.position).normalized *
                                 GameManager._Instance.MGameTime * m_moveSpeed;
@@ -281,8 +292,27 @@ public abstract class Enemy : MonoBehaviour
         if (m_current_health <= 0.0f)
         {
             m_is_dead = true;
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
+            GetComponent<SpriteRenderer>().enabled = false;
+            GetComponent<Collider>().enabled = false;
+
         }
+    }
+
+
+    public void Reset()
+    {
+        // reset position 
+        transform.position = m_start_position;
+
+        // reset stats
+        m_current_health = m_maxHealth;
+        m_is_dead = true;
+        GetComponent<SpriteRenderer>().enabled = true;
+        GetComponent<Collider>().enabled = true;
+
+        // reset state
+        curState = EnemyState.Patrol;
     }
 
 

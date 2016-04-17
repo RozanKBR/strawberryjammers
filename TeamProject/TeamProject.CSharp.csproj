@@ -76,6 +76,8 @@
     <Compile Include="Assets\Scripts\HubMechanics\RouletteWheel.cs" />
     <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
     <Compile Include="Assets\Scripts\Object Pool\ObjectPool.cs" />
+    <Compile Include="Assets\Scripts\Utility\Butterfly.cs" />
+    <Compile Include="Assets\Scripts\Utility\ButterflyFlocking.cs" />
     <Compile Include="Assets\Scripts\Weapons\Bow.cs" />
     <Compile Include="Assets\Scripts\Weapons\Gun.cs" />
     <Compile Include="Assets\Scripts\Weapons\Sword.cs" />

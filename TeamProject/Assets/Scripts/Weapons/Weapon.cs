@@ -33,5 +33,5 @@ public abstract class Weapon : MonoBehaviour
         }
     }
     
-    public abstract void Attack(Vector3 direction, Vector3 origin);
+    public abstract void Attack(Vector3 direction, Vector3 origin, Target t);
 }
