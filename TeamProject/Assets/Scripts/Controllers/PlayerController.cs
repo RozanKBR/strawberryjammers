@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float m_startAttack = 2f;
     [SerializeField] private float m_startDefense = 2f;
     [SerializeField] private GameObject m_gameOverScreen = null;
+    [SerializeField] private GameObject m_weaponSlot = null;
     [SerializeField] private Transform m_spawnPoint = null;
 
     private bool m_is_rolling = false;
@@ -35,20 +36,18 @@ public class PlayerController : MonoBehaviour
 
     private PlayerStats m_stats = new PlayerStats();
     private Weapon m_weapon = null;
+    private Transform m_weapon_slot_transform = null;
+    private SpriteRenderer m_weapon_slot_sprite_renderer = null;
 
     void Awake()
     {
         transform = GetComponent<Transform>();
-        //renderer = GetComponent<SpriteRenderer>();
 
-        //m_sprite = renderer.sprite;
-
-        //temp
-        //if (m_weaponSlot == null)
-        //    Debug.LogError("No Weapon Assigned!");
-
-        //m_weapon = m_weaponSlot.GetComponent<Weapon>();
-        //m_weapon = GameManager._Instance.AvailableWeapons[0];
+        if (m_weaponSlot)
+        {
+            m_weapon_slot_transform = m_weaponSlot.GetComponent<Transform>();
+            m_weapon_slot_sprite_renderer = m_weaponSlot.GetComponent<SpriteRenderer>();
+        }
     }
 
     void Start()
@@ -81,6 +80,7 @@ public class PlayerController : MonoBehaviour
 
             // getting the right direction
             DirectionToOne(ref m_current_direction, m_buttonPressureOffset);
+            AdjustWeaponRotation();
         }
 
         PlayerMovement(h, v);
@@ -181,6 +181,7 @@ public class PlayerController : MonoBehaviour
     public void AssignWeapon (Weapon w)
     {
         m_weapon = w;
+        m_weapon_slot_sprite_renderer.sprite = w.weaponSprite;
     }
 
     public void ApplyDamage(float damage)
@@ -200,6 +201,59 @@ public class PlayerController : MonoBehaviour
             m_gameOverScreen.SetActive(true);
 
             GameManager._Instance.PauseGame();
+        }
+    }
+
+    private void AdjustWeaponRotation()
+    {
+        if (m_current_direction.x > 0.1f)
+        {
+            if (m_current_direction.z > 0.1f)
+            {
+                m_weapon_slot_transform.rotation = 
+                    Quaternion.Euler(new Vector3(90f, 0f, 45f));
+            }
+            else if (m_current_direction.z < -0.1f)
+            {
+                m_weapon_slot_transform.rotation =
+                   Quaternion.Euler(new Vector3(90f, 0f, -45f));
+            }
+            else
+            {
+                m_weapon_slot_transform.rotation =
+                   Quaternion.Euler(new Vector3(90f, 0f, 0f));
+            }
+        }
+        else if (m_current_direction.x < -0.1f)
+        {
+            if (m_current_direction.z > 0.1f)
+            {
+                m_weapon_slot_transform.rotation =
+                   Quaternion.Euler(new Vector3(90f, 0f, -45 + 180f));
+            }
+            else if (m_current_direction.z < -0.1f)
+            {
+                m_weapon_slot_transform.rotation =
+                   Quaternion.Euler(new Vector3(90f, 0f, 45 + 180f));
+            }
+            else
+            {
+                m_weapon_slot_transform.rotation =
+                   Quaternion.Euler(new Vector3(90f, 0f, 180f));
+            }
+        }
+        else
+        {
+            if (m_current_direction.z > 0.1f)
+            {
+                m_weapon_slot_transform.rotation =
+                   Quaternion.Euler(new Vector3(90f, 0f, 90f));
+            }
+            else if (m_current_direction.z < 0.1f)
+            {
+                m_weapon_slot_transform.rotation =
+                   Quaternion.Euler(new Vector3(90f, 0f, -90f));
+            }
         }
     }
 

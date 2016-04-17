@@ -4,13 +4,12 @@ using System;
 
 public class Skeleton : Enemy
 {
-
     // Weapon Type
     public Weapon bow;
 
     protected override void Attack()
     {
-        bow.Attack(destPos - transform.position, transform.position);
+        bow.Attack((destPos - transform.position).normalized, transform.position);
     }
 
     protected override void FindPlayer()

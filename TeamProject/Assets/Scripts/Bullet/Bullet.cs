@@ -12,6 +12,8 @@ public class Bullet : MonoBehaviour
     public Vector3 direction;
     private float m_damage = 0f;
     private new Transform transform;
+    private string m_tag_to_kill;
+    //private Types m_type_to_kill;
 
     void Awake()
     {

@@ -11,6 +11,10 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected float m_defense = 2.0f;
     [SerializeField] protected float m_attack = 2.0f;
     [SerializeField] protected float m_moveSpeed = 5.0f;
+    [SerializeField] protected float m_chaseDistance = 20f;
+    [SerializeField] protected float m_attackDistance = 20f;
+    [SerializeField] protected float m_backToPatrolDistance = 20f;
+    [SerializeField] protected float m_attackRange = 5.0f;
 
     public float EnemyAttack { get { return m_attack; } }
 
@@ -65,8 +69,8 @@ public abstract class Enemy : MonoBehaviour
         if (!_target)
             print("Player non existant" + "Add one with tag 'Player'");
         //get the weapon of the enemy
-        weapon = gameObject.transform.GetChild(0).transform;
-        ProjectileSpawnPoint = weapon.GetChild(0).transform;
+        //weapon = gameObject.transform.GetChild(0).transform;
+        //ProjectileSpawnPoint = weapon.GetChild(0).transform;
     }
     protected virtual void EnemyUpdate()
     {
@@ -77,6 +81,8 @@ public abstract class Enemy : MonoBehaviour
             case EnemyState.Attack: UpdateAttackState(); break;
             case EnemyState.Dead:   UpdateDeadState(); break;
         }
+        Debug.Log("State: " + curState);
+
 
         //update the time
         elapsedTime += Time.deltaTime;
@@ -88,28 +94,29 @@ public abstract class Enemy : MonoBehaviour
     protected void UpdatePatrolState()
     {
         //find anaother random patrol point if the current pont is reached
-        if (Vector3.Distance(transform.position, destPos) <= 100.0f)
+        if (Vector3.Distance(transform.position, destPos) <= 5.0f)
         {
             FindNextPoint();
         }
 
         //check the Distance with the player character
         //When the Distance is near, change to chase state
-        else if (Vector3.Distance(transform.position, _target.position) <= 300.0f)
+        else if (Vector3.Distance(transform.position, _target.position) <= m_chaseDistance)
         {
             curState = EnemyState.Chase;
+            Debug.Log("Chasing");
         }
 
         //Rotate to the Target Point
-        Quaternion targetRotation = Quaternion.LookRotation(destPos - transform.position);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * curRotSpeed);
+        //Quaternion targetRotation = Quaternion.LookRotation(destPos - transform.position);
+        //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * curRotSpeed);
         //Go Forward
-        transform.Translate(Vector3.forward * Time.deltaTime * curSpeed);
+        //transform.Translate((destPos - transform.position) * Time.deltaTime * curSpeed);
     }
 
     protected void FindNextPoint()
     {
-        print("Finding next point");
+        //print("Finding next point");
         int rndIndex = Random.Range(0, pointList.Length);
         float rndRadius = 10.0f;
         Vector3 rndPosition = Vector3.zero;
@@ -143,17 +150,18 @@ public abstract class Enemy : MonoBehaviour
 
         //Check the distance with player when the distance is near, transition to attack state
         float dist = Vector3.Distance(transform.position, _target.position);
-        if (dist <= 200.0f)
+        if (dist <= m_attackDistance)
         {
             curState = EnemyState.Attack;
         }
         //Go back to patrol if it become too far
-        else if (dist >= 300.0f)
+        else if (dist >= m_backToPatrolDistance)
         {
             curState = EnemyState.Patrol;
         }
         //go forward
-        transform.Translate(Vector3.forward * Time.deltaTime * curSpeed);
+        //transform.Translate((_target.position - transform.position).normalized * 
+        //                    Time.deltaTime * curSpeed);
     }
 
     protected void UpdateAttackState()
@@ -162,23 +170,24 @@ public abstract class Enemy : MonoBehaviour
         destPos = _target.position;
         //check the distance with the player
         float dist = Vector3.Distance(transform.position, _target.position);
-        if (dist >= 200.0f && dist < 300.0f)
+        if (dist >= m_attackDistance - m_attackRange && dist < m_attackDistance + m_attackRange)
         {
             //rotate to target point
-            Quaternion targetRotation = Quaternion.LookRotation(destPos - transform.position);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * curRotSpeed);
+            //Quaternion targetRotation = Quaternion.LookRotation(destPos - transform.position);
+            //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * curRotSpeed);
             // go forward
-            transform.Translate(Vector3.forward * Time.deltaTime * curSpeed);
+            //transform.Translate((destPos - transform.position).normalized * 
+            //                    Time.deltaTime * curSpeed);
             curState = EnemyState.Attack;
         }
-        else if (dist >= 300.0f)
+        else if (dist >= m_backToPatrolDistance)
         {
             curState = EnemyState.Patrol;
         }
 
         //Always Turn the turret towards the player
-        Quaternion turretRotation = Quaternion.LookRotation(destPos - weapon.position);
-        weapon.rotation = Quaternion.Slerp(weapon.rotation, turretRotation, Time.deltaTime * curRotSpeed);
+        //Quaternion turretRotation = Quaternion.LookRotation(destPos - weapon.position);
+        //weapon.rotation = Quaternion.Slerp(weapon.rotation, turretRotation, Time.deltaTime * curRotSpeed);
         //shoot the projectiles
         ShootProjectile();
     }
@@ -240,6 +249,14 @@ public abstract class Enemy : MonoBehaviour
     {
         EnemyFixedUpdate();
     }
+
+    void LateUpdate()
+    {
+        transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+        transform.position += (destPos - transform.position).normalized *
+                                GameManager._Instance.MGameTime * m_moveSpeed;
+    }
+
     void Awake()
     {
         transform = GetComponent<Transform>();
