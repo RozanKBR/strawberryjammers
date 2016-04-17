@@ -4,25 +4,23 @@ using System;
 
 public class Skeleton : Enemy
 {
+
+    // Weapon Type
+    public Weapon bow;
+
     protected override void Attack()
     {
-        throw new NotImplementedException();
+        bow.Attack(destPos - transform.position, transform.position);
     }
 
     protected override void FindPlayer()
     {
-        throw new NotImplementedException();
+        
     }
 
     // Use this for initialization
     void Start()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        BaseStart();
     }
 }
