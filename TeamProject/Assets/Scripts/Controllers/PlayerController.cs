@@ -7,8 +7,8 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
     private new Transform transform = null;
-    private new SpriteRenderer renderer = null;
-    private Sprite m_sprite = null;
+    //private new SpriteRenderer renderer = null;
+    //private Sprite m_sprite = null;
 
     [Header("Character Movement")]
     [SerializeField] private float m_buttonPressureOffset = 0.2f;
@@ -60,8 +60,8 @@ public class PlayerController : MonoBehaviour
         m_is_movement_button_pressed =  Mathf.Abs(h) >= m_buttonPressureOffset ||
                                         Mathf.Abs(v) >= m_buttonPressureOffset;
 
-        //if (m_is_movement_button_pressed)
-        m_current_direction = ((Vector3.right * h) + (Vector3.forward * v));
+        if (m_is_movement_button_pressed)
+            m_current_direction = ((Vector3.right * h) + (Vector3.forward * v));
 
         PlayerMovement(h, v);
         PlayerRolling(h, v);

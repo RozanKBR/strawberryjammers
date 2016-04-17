@@ -54,4 +54,14 @@ public class GameManager : MonoBehaviour
     {
         MGameTime = MGameState == GameState.Running ? Time.deltaTime : 0f;
     }
+
+    public void PauseGame()
+    {
+        MGameState = GameState.Paused;
+    }
+
+    public void UnPauseGame()
+    {
+        MGameState = GameState.Running;
+    }
 }

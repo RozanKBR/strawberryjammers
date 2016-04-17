@@ -77,11 +77,11 @@ public sealed class ObjectPool : MonoBehaviour
             instance.prefabLookup.Remove(obj);
             obj.transform.parent = instance.transform;
             obj.gameObject.SetActive(false); //deactivate the object
-            Debug.Log("Recycle");
+            //Debug.Log("Recycle");
         }
         else
         {
-            Debug.Log("Throw Away");
+            //Debug.Log("Throw Away");
             Object.Destroy(obj.gameObject);
         }
     }

@@ -11,15 +11,16 @@ public class Bow : Weapon
 
     public override void Attack(Vector3 direction, Vector3 origin)
     {
-        //m_arrow.CreatePool();
+        m_arrow.CreatePool();
 
         if (transform == null)
             transform = GetComponent<Transform>();
 
         transform.position = origin;
 
-        m_arrow.Reset(origin);
-        m_arrow.direction = direction;
-        m_arrow.Spawn(transform.position, transform.rotation);
+        Bullet b = m_arrow.Spawn(transform.position, transform.rotation);
+        b.Reset(origin);
+        b.direction = direction;
+        b.SetDamage(damage);
     }
 }

@@ -42,7 +42,10 @@ public abstract class Enemy : MonoBehaviour
     private void CheckForHealth()
     {
         if (m_current_health <= 0.0f)
+        {
             m_is_dead = true;
+            Destroy(this.gameObject);
+        }
     }
 
 
