@@ -66,6 +66,12 @@ public class Bullet : MonoBehaviour
         this.Recycle();
     }
 
+    public void DestroyIt()
+    {
+        StopAllCoroutines();
+        this.Recycle();
+    }
+
     public void SetDamage(float damage)
     {
         m_damage = damage;
