@@ -38,6 +38,7 @@ public class Bullet : MonoBehaviour
     {
         direction.Normalize();
         float travelledDistance = 0;
+        
         while (travelledDistance < m_shootDistance)
         {
             travelledDistance += m_shootSpeed * GameManager._Instance.MGameTime;
@@ -79,5 +80,55 @@ public class Bullet : MonoBehaviour
 
         direction = Vector3.zero;
         m_damage = 0f;
+    }
+
+    public void SetDirection (Vector3 Ndirection)
+    {
+        direction = Ndirection;
+
+        if (transform == null)
+            transform = GetComponent<Transform>();
+
+        if (direction.x > 0.1f)
+        {
+            if (direction.z > 0.1f)
+            {
+                transform.Rotate(new Vector3(0f, 0f, 45f));
+            }
+            else if (direction.z < -0.1f)
+            {
+                transform.Rotate(new Vector3(0f, 0f, -45f));
+            }
+            else
+            {
+                transform.Rotate(new Vector3(0f, 0f, 0f));
+            }
+        }
+        else if (direction.x < -0.1f)
+        {
+            if (direction.z > 0.1f)
+            {
+                transform.Rotate(new Vector3(0f, 0f, -45 + 180f));
+            }
+            else if (direction.z < -0.1f)
+            {
+                transform.Rotate(new Vector3(0f, 0f, 45 + 180f));
+            }
+            else
+            {
+                transform.Rotate(new Vector3(0f, 0f, 180f));
+            }
+        }
+        else
+        {
+            if (direction.z > 0.1f)
+            {
+                transform.Rotate(new Vector3(0f, 0f, 90f));
+            }
+            else if (direction.z < 0.1f)
+            {
+                transform.Rotate(new Vector3(0f, 0f, -90f));
+            }
+        }
     }
 }

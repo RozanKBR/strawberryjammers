@@ -5,4 +5,6 @@ using System.Collections;
 
 
 public abstract class Boss : Enemy
-{ }
+{
+
+}

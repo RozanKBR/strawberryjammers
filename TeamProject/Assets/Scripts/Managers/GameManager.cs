@@ -64,4 +64,9 @@ public class GameManager : MonoBehaviour
     {
         MGameState = GameState.Running;
     }
+
+    public void ResetGame()
+    {
+        UnPauseGame();
+    }
 }

@@ -8,6 +8,9 @@ public class Gun : Weapon
 
     public override void Attack(Vector3 direction, Vector3 origin)
     {
+        if (m_has_attacked)
+            return;
+
         m_bullet.CreatePool();
 
         if (transform == null)
@@ -17,7 +20,7 @@ public class Gun : Weapon
 
         Bullet b = m_bullet.Spawn(transform.position, transform.rotation);
         b.Reset(origin);
-        b.direction = direction;
+        b.SetDirection(direction);
         b.SetDamage(damage);
     }
 }

@@ -17,6 +17,7 @@ public abstract class Enemy : MonoBehaviour
     public float EnemyDefece { get { return m_attack; } }
 
     protected static Transform _target = null;
+    protected static PlayerController _target_controller = null;
     protected new Transform transform = null;
     protected Animator animator = null;
 
@@ -58,6 +59,9 @@ public abstract class Enemy : MonoBehaviour
         //get the target enemy (Player)
         GameObject objPlayer = GameObject.FindGameObjectWithTag("Player");
         _target = objPlayer.transform;
+
+        _target_controller = objPlayer.GetComponent<PlayerController>();
+
         if (!_target)
             print("Player non existant" + "Add one with tag 'Player'");
         //get the weapon of the enemy
